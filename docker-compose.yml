@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  quickbite-user:
+    image: quickbite-user-service:latest
+    container_name: quickbite-user
+    ports:
+      - "${USER_SERVER_PORT}:${USER_SERVER_PORT}"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://${DB_HOST}:${DB_PORT}/${USER_DB_NAME}
+      - SPRING_DATASOURCE_USERNAME=${USER_DB_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${USER_DB_PASSWORD}
+    networks:
+      - quickbite-net
+    restart: unless-stopped
+
+  quickbite-restaurant:
+    image: quickbite-restaurant-service:latest
+    container_name: quickbite-restaurant
+    ports:
+      - "${RESTAURANT_SERVER_PORT}:${RESTAURANT_SERVER_PORT}"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://${DB_HOST}:${DB_PORT}/${RESTAURANT_DB_NAME}
+      - SPRING_DATASOURCE_USERNAME=${RESTAURANT_DB_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${RESTAURANT_DB_PASSWORD}
+    networks:
+      - quickbite-net
+    restart: unless-stopped
+
+  quickbite-order:
+    image: quickbite-order-service:latest
+    container_name: quickbite-order
+    ports:
+      - "${ORDER_SERVER_PORT}:${ORDER_SERVER_PORT}"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://${DB_HOST}:${DB_PORT}/${ORDER_DB_NAME}
+      - SPRING_DATASOURCE_USERNAME=${ORDER_DB_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${ORDER_DB_PASSWORD}
+    networks:
+      - quickbite-net
+    restart: unless-stopped
+
+  quickbite-notification:
+    image: quickbite-notification-service:latest
+    container_name: quickbite-notification
+    ports:
+      - "${NOTIFICATION_SERVER_PORT}:${NOTIFICATION_SERVER_PORT}"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://${DB_HOST}:${DB_PORT}/${NOTIFICATION_DB_NAME}
+      - SPRING_DATASOURCE_USERNAME=${NOTIFICATION_DB_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${NOTIFICATION_DB_PASSWORD}
+    networks:
+      - quickbite-net
+    restart: unless-stopped
+
+networks:
+  quickbite-net:
+    external: true
